@@ -35,37 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
   double _balance = 3200.00;
   bool _isBalanceVisible = true;
 
-  // Static list of transactions
-  final List<Map<String, dynamic>> _transactions = [
-    {
-      'merchant': 'Starbucks Coffee',
-      'date': 'October 17, 09:00 PM',
-      'amount': -44.80,
-      'cashback': r'+$1.65',
-      'icon': Icons.local_cafe_rounded,
-    },
-    {
-      'merchant': 'Direct Deposit',
-      'date': 'October 15, 08:30 AM',
-      'amount': 1500.00,
-      'icon': Icons.account_balance_wallet_rounded,
-    },
-    {
-      'merchant': 'Apple Store',
-      'date': 'October 12, 02:15 PM',
-      'amount': -999.00,
-      'icon': Icons.laptop_mac_rounded,
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Display current tab content
+          // Body content
           _currentIndex == 0 ? _buildDashboard() : _buildComingSoon(),
-          // Rounded Custom Bottom Navigation Bar
+          // Bottom Navigation Bar
           Positioned(
             left: 0,
             right: 0,
@@ -77,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Main Dashboard / Home Screen
+  // Dashboard Home View
   Widget _buildDashboard() {
     return SafeArea(
       child: SingleChildScrollView(
@@ -86,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Greeting & Notification Header
+            // Header Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -95,11 +72,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     const Text(
                       'Good morning, Terry',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF202020)),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Color(0xFF202020),
+                      ),
                     ),
+                    const SizedBox(height: 2),
                     Text(
                       'Welcome to Neobank',
-                      style: TextStyle(color: const Color(0xFF202020).withOpacity(0.6), fontSize: 14),
+                      style: TextStyle(
+                        color: const Color(0xFF202020).withOpacity(0.6),
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -108,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Balance Card
+            // Balance Card with Hide/Show balance
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
@@ -123,11 +108,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text(
                         'Your balance',
-                        style: TextStyle(color: const Color(0xFF202020).withOpacity(0.6), fontSize: 14),
+                        style: TextStyle(
+                          color: const Color(0xFF202020).withOpacity(0.6),
+                          fontSize: 14,
+                        ),
                       ),
                       IconButton(
                         icon: Icon(
-                          _isBalanceVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                          _isBalanceVisible
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
                           color: const Color(0xFF7A7C80),
                         ),
                         onPressed: () => setState(() => _isBalanceVisible = !_isBalanceVisible),
@@ -138,11 +128,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     _isBalanceVisible
                         ? '\$${_balance.toStringAsFixed(2).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},')}'
                         : '\$ ••••••',
-                    style: const TextStyle(fontSize: 38, fontWeight: FontWeight.bold, color: Color(0xFF202020)),
+                    style: const TextStyle(
+                      fontSize: 38,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF202020),
+                    ),
                   ),
                   const SizedBox(height: 20),
+                  // Simple Add money button (adds $100 instantly for demo)
                   GestureDetector(
-                    onTap: _addMoney,
+                    onTap: () {
+                      setState(() {
+                        _balance += 100.00;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text(r'Added $100.00 to your balance!'),
+                          duration: const Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      );
+                    },
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -153,7 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: const Center(
                         child: Text(
                           'Add money',
-                          style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -163,13 +174,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 32),
 
-            // Cards section title
+            // Your Cards Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
                   'Your cards',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF202020)),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF202020),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {},
@@ -177,7 +192,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Icon(Icons.add, size: 16, color: Color(0xFF202020)),
                       SizedBox(width: 4),
-                      Text('New card', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF202020))),
+                      Text(
+                        'New card',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF202020),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -185,17 +206,33 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
 
-            // Swipable cards list using a simple Row inside SingleChildScrollView
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              child: Row(
+            // Swipable Card Carousel (PageView containing hardcoded cards)
+            SizedBox(
+              height: 180,
+              child: PageView(
+                controller: PageController(viewportFraction: 0.85),
                 children: [
-                  _buildCard('4568', 'Debit Card', const Color(0xFFC9F158), true),
-                  const SizedBox(width: 12),
-                  _buildCard('2478', 'Credit card', const Color(0xFF202020), false),
-                  const SizedBox(width: 12),
-                  _buildCard('9012', 'Bank Account', const Color(0xFFE2E4E8), false),
+                  // Neon Lime Debit Card
+                  _buildCard(
+                    color: const Color(0xFFC9F158),
+                    type: 'Debit Card',
+                    number: '4568',
+                    isNeon: true,
+                  ),
+                  // Dark Charcoal Credit Card
+                  _buildCard(
+                    color: const Color(0xFF202020),
+                    type: 'Credit card',
+                    number: '2478',
+                    isNeon: false,
+                  ),
+                  // Light Gray Bank Account Card
+                  _buildCard(
+                    color: const Color(0xFFE2E4E8),
+                    type: 'Bank Account',
+                    number: '9012',
+                    isNeon: false,
+                  ),
                 ],
               ),
             ),
@@ -207,71 +244,45 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const Text(
                   'Transactions',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF202020)),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF202020),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {},
-                  child: const Text('See all', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF202020))),
+                  child: const Text(
+                    'See all',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF202020),
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
 
-            // List of Transactions using simple Column and loops
-            Column(
-              children: [
-                for (var tx in _transactions)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
-                          child: Icon(tx['icon'] as IconData, color: const Color(0xFF202020), size: 24),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                tx['merchant'] as String,
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF202020)),
-                              ),
-                              Text(
-                                tx['date'] as String,
-                                style: TextStyle(color: const Color(0xFF202020).withOpacity(0.6), fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              '${(tx['amount'] as double) < 0 ? '-' : '+'}\$${(tx['amount'] as double).abs().toStringAsFixed(2)}',
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF202020)),
-                            ),
-                            if (tx['cashback'] != null)
-                              Container(
-                                margin: const EdgeInsets.only(top: 4),
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFC9F158).withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  tx['cashback'] as String,
-                                  style: const TextStyle(color: Color(0xFF7CA018), fontWeight: FontWeight.bold, fontSize: 10),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-              ],
+            // Hardcoded Transactions list (simple & straight-forward)
+            _buildTransactionRow(
+              merchant: 'Starbucks Coffee',
+              date: 'October 17, 09:00 PM',
+              amount: '-\$44.80',
+              cashback: '+\$1.65',
+              icon: Icons.local_cafe_rounded,
+            ),
+            _buildTransactionRow(
+              merchant: 'Direct Deposit',
+              date: 'October 15, 08:30 AM',
+              amount: '+\$1,500.00',
+              icon: Icons.account_balance_wallet_rounded,
+            ),
+            _buildTransactionRow(
+              merchant: 'Apple Store',
+              date: 'October 12, 02:15 PM',
+              amount: '-\$999.00',
+              icon: Icons.laptop_mac_rounded,
             ),
             const SizedBox(height: 100),
           ],
@@ -280,12 +291,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Helper widget to build a Card item
-  Widget _buildCard(String number, String type, Color color, bool isNeon) {
+  // Card UI helper
+  Widget _buildCard({
+    required Color color,
+    required String type,
+    required String number,
+    required bool isNeon,
+  }) {
     final textColor = isNeon ? const Color(0xFF202020) : Colors.white;
     return Container(
-      width: 280,
-      height: 180,
+      margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: color,
@@ -298,31 +313,58 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('N.', style: TextStyle(color: textColor, fontSize: 24, fontWeight: FontWeight.w900)),
+              Text(
+                'N.',
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
               _buildMastercardLogo(),
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(type, style: TextStyle(color: textColor.withOpacity(0.6), fontSize: 12)),
+              Text(
+                type,
+                style: TextStyle(
+                  color: textColor.withOpacity(0.6),
+                  fontSize: 12,
+                ),
+              ),
               const SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     '•••• $number',
-                    style: TextStyle(color: textColor, fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   if (isNeon)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       child: const Row(
                         children: [
                           Icon(Icons.remove_red_eye_outlined, size: 14, color: Color(0xFF202020)),
                           SizedBox(width: 4),
-                          Text('Details', style: TextStyle(color: Color(0xFF202020), fontSize: 11, fontWeight: FontWeight.bold)),
+                          Text(
+                            'Details',
+                            style: TextStyle(
+                              color: Color(0xFF202020),
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -335,7 +377,85 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Custom Navigation Bar Widget
+  // Transaction Row UI helper
+  Widget _buildTransactionRow({
+    required String merchant,
+    required String date,
+    required String amount,
+    String? cashback,
+    required IconData icon,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: const Color(0xFF202020), size: 24),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  merchant,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Color(0xFF202020),
+                  ),
+                ),
+                Text(
+                  date,
+                  style: TextStyle(
+                    color: const Color(0xFF202020).withOpacity(0.6),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                amount,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Color(0xFF202020),
+                ),
+              ),
+              if (cashback != null)
+                Container(
+                  margin: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFC9F158).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    cashback,
+                    style: const TextStyle(
+                      color: Color(0xFF7CA018),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Floating Custom Navigation Bar
   Widget _buildBottomNav() {
     return Container(
       height: 90,
@@ -390,7 +510,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Simplified Coming Soon View
+  // Generic Coming Soon Screen
   Widget _buildComingSoon() {
     final names = {1: 'Map View', 2: 'Transfer', 3: 'Settings', 4: 'Profile'};
     return Center(
@@ -400,13 +520,23 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF202020).withOpacity(0.05),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.hourglass_empty_rounded, color: Color(0xFF202020), size: 48),
             const SizedBox(height: 16),
-            Text(names[_currentIndex] ?? '', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              names[_currentIndex] ?? '',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             const Text('Coming Soon', style: TextStyle(color: Colors.grey)),
             const SizedBox(height: 24),
@@ -424,28 +554,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Simple Add Money execution (instantly adds $100 for demonstration)
-  void _addMoney() {
-    setState(() {
-      _balance += 100.00;
-      _transactions.insert(0, {
-        'merchant': 'Deposit via Card',
-        'date': 'Just now',
-        'amount': 100.00,
-        'icon': Icons.add_circle_outline_rounded,
-      });
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Successfully added \$100.00 to Neobank balance!'),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        backgroundColor: const Color(0xFF202020),
-      ),
-    );
-  }
-
-  // Simple Notification bell design helper
+  // Custom UI elements: Notification Bell
   Widget _buildNotificationBell() {
     return Stack(
       children: [
@@ -456,7 +565,11 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: const Color(0xFFE2E4E8), width: 1.5),
           ),
-          child: const Icon(Icons.notifications_none_rounded, color: Color(0xFF202020), size: 24),
+          child: const Icon(
+            Icons.notifications_none_rounded,
+            color: Color(0xFF202020),
+            size: 24,
+          ),
         ),
         Positioned(
           top: 4,
@@ -475,14 +588,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Mastercard mini-logo drawer helper
+  // Overlapping circles for MasterCard logo
   Widget _buildMastercardLogo() {
     return SizedBox(
       width: 30,
       height: 20,
       child: Stack(
         children: [
-          Container(width: 20, height: 20, decoration: const BoxDecoration(color: Color(0xFFEB001B), shape: BoxShape.circle)),
+          Container(
+            width: 20,
+            height: 20,
+            decoration: const BoxDecoration(
+              color: Color(0xFFEB001B),
+              shape: BoxShape.circle,
+            ),
+          ),
           Positioned(
             left: 10,
             child: Container(
